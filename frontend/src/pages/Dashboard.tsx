@@ -39,9 +39,9 @@ export default function Dashboard() {
   const [error, setError] = useState('');
 
   // Conversion form states
-  //eslint-disable-nextline @typescript-eslint/no-unused-vars
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fromCurrency, setFromCurrency] = useState('NGN');
-  //eslint-disable-nextline @typescript-eslint/no-unused-vars
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [toCurrency, setToCurrency] = useState('USD');
   const [amount, setAmount] = useState<number>(0);
   const [convertResult, setConvertResult] = useState<number | null>(null);
@@ -126,144 +126,159 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) return <p>Loading dashboard...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loading) return <p className="text-center mt-5">Loading dashboard...</p>;
+  if (error) return <p className="text-danger text-center mt-5">{error}</p>;
 
   return (
-    <>
-      <div style={{ padding: '1rem' }}>
-        <h2>Dashboard</h2>
-
-        <section>
-          <h3>Your Wallets</h3>
-          {wallets.length === 0 ? (
-            <p>No wallets yet. Fund one to start trading.</p>
-          ) : (
-            <ul>
-              {wallets.map((w) => (
-                <li key={w.id}>
-                  <strong>{w.currency}:</strong> {w.amount.toFixed(2)}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section style={{ margin: '2rem 0' }}>
-          <h3>Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})</h3>
-          <p>
-            {currentRate !== null
-              ? `1 ${fromCurrency.toUpperCase()} = ${currentRate.toFixed(6)} ${toCurrency.toUpperCase()}`
-              : 'Click "Fetch Rate" to see current rate'}
-          </p>
-          <button onClick={fetchRate}>Fetch Rate</button>
-        </section>
-
-        <section style={{ margin: '2rem 0' }}>
-          <h3>Fund Wallet</h3>
-          <form onSubmit={handleFund} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <div>
-              <CurrencySelect
-                label="Currency"
-                value={fundCurrency}
-                onChange={(e) => setFundCurrency(e.target.value)}
-              />
+    <div className="container mt-4">  {/* Main container */}
+      <h2 className="mb-4">Dashboard</h2>
+      <div className="row">  {/* Grid layout for sections */}
+        <div className="col-md-6 mb-4">
+          <div className="card shadow">  {/* Card for wallets */}
+            <div className="card-header bg-primary text-white">Your Wallets</div>
+            <div className="card-body">
+              {wallets.length === 0 ? (
+                <p>No wallets yet. Fund one to start trading.</p>
+              ) : (
+                <ul className="list-group list-group-flush">
+                  {wallets.map((w) => (
+                    <li key={w.id} className="list-group-item">
+                      <strong>{w.currency}:</strong> {w.amount.toFixed(2)}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+          </div>
+        </div>
 
-            <div>
-              <label>Amount:</label>
-              <input
-                type="number"
-                value={fundAmount}
-                onChange={(e) => setFundAmount(Number(e.target.value))}
-                min="0"
-                step="0.01"
-              />
+        <div className="col-md-6 mb-4">
+          <div className="card shadow">
+            <div className="card-header bg-primary text-white">Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})</div>
+            <div className="card-body">
+              <p>
+                {currentRate !== null
+                  ? `1 ${fromCurrency.toUpperCase()} = ${currentRate.toFixed(6)} ${toCurrency.toUpperCase()}`
+                  : 'Click "Fetch Rate" to see current rate'}
+              </p>
+              <button className="btn btn-primary" onClick={fetchRate}>Fetch Rate</button>
             </div>
-            <button type="submit">Fund</button>
-          </form>
+          </div>
+        </div>
+      </div>
 
-          {fundResult && (
-            <p style={{ marginTop: '1rem', color: 'green' }}>{fundResult}</p>
-          )}
-        </section>
-
-        <section>
-          <h3>Convert Currency</h3>
-          <form onSubmit={handleConvert} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            {/* Updated From input */}
-            <div>
-              <CurrencySelect
-                label="From"
-                value={fromCurrency}
-                onChange={(e) => setFromCurrency(e.target.value)}
-              />
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <div className="card shadow">
+            <div className="card-header bg-primary text-white">Fund Wallet</div>
+            <div className="card-body">
+              <form onSubmit={handleFund} className="d-flex flex-column gap-3">  {/* Flex for spacing */}
+                <div className="form-group">
+                  <CurrencySelect
+                    label="Currency"
+                    value={fundCurrency}
+                    onChange={(e) => setFundCurrency(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Amount:</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={fundAmount}
+                    onChange={(e) => setFundAmount(Number(e.target.value))}
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">Fund</button>
+              </form>
+              {fundResult && (
+                <p className="mt-3 text-success">{fundResult}</p>
+              )}
             </div>
+          </div>
+        </div>
 
-            {/* Updated To input */}
-            <div>
-              <label>To:</label>
-              <CurrencySelect
-                label="To"
-                value={toCurrency}
-                onChange={(e) => setToCurrency(e.target.value)}
-              />
+        <div className="col-md-6 mb-4">
+          <div className="card shadow">
+            <div className="card-header bg-primary text-white">Convert Currency</div>
+            <div className="card-body">
+              <form onSubmit={handleConvert} className="d-flex flex-column gap-3">
+                <div className="form-group">
+                  <CurrencySelect
+                    label="From"
+                    value={fromCurrency}
+                    onChange={(e) => setFromCurrency(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <CurrencySelect
+                    label="To"
+                    value={toCurrency}
+                    onChange={(e) => setToCurrency(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Amount:</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={amount}
+                    onChange={(e) => setAmount(Number(e.target.value))}
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary">Convert</button>
+              </form>
+              {convertResult !== null && (
+                <p className="mt-3 text-success">
+                  Success! Converted amount: {convertResult.toFixed(6)} {toCurrency.toUpperCase()}
+                </p>
+              )}
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div>
-              <label>Amount:</label>
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                min="0"
-                step="0.01"
-              />
-            </div>
-            <button type="submit">Convert</button>
-          </form>
-
-          {convertResult !== null && (
-            <p style={{ marginTop: '1rem', color: 'green' }}>
-              Success! Converted amount: {convertResult.toFixed(6)} {toCurrency.toUpperCase()}
-            </p>
-          )}
-        </section>
-
-        <section style={{ marginTop: '2rem' }}>
-          <h3>Transaction History</h3>
+      <div className="card shadow mt-4">
+        <div className="card-header bg-primary text-white">Transaction History</div>
+        <div className="card-body">
           {transactions.length === 0 ? (
             <p>No transactions yet.</p>
           ) : (
-            <table border={1} cellPadding={8} style={{ borderCollapse: 'collapse', width: '100%' }}>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Amount</th>
-                  <th>From → To</th>
-                  <th>Rate</th>
-                  <th>Status</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((tx) => (
-                  <tr key={tx.id}>
-                    <td>{tx.type}</td>
-                    <td>{tx.amount}</td>
-                    <td>
-                      {tx.fromCurrency} → {tx.toCurrency}
-                    </td>
-                    <td>{tx.rate ?? '-'}</td>
-                    <td>{tx.status}</td>
-                    <td>{new Date(tx.timestamp).toLocaleString()}</td>
+            <div className="table-responsive">  {/* Responsive table */}
+              <table className="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>From → To</th>
+                    <th>Rate</th>
+                    <th>Status</th>
+                    <th>Time</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {transactions.map((tx) => (
+                    <tr key={tx.id}>
+                      <td>{tx.type}</td>
+                      <td>{tx.amount}</td>
+                      <td>
+                        {tx.fromCurrency} → {tx.toCurrency}
+                      </td>
+                      <td>{tx.rate ?? '-'}</td>
+                      <td>{tx.status}</td>
+                      <td>{new Date(tx.timestamp).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
-        </section>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

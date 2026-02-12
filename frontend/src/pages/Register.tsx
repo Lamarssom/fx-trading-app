@@ -49,35 +49,54 @@ export default function Register() {
   };
 
   return (
-    <div>
-      <h2>{step === 'register' ? 'Register' : 'Verify OTP'}</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {step === 'register' ? (
-        <form onSubmit={handleRegister}>
-          <div>
-            <label>Email:</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-      ) : (
-        <form onSubmit={handleVerify}>
-          <div>
-            <label>OTP (check console):</label>
-            <input value={otp} onChange={(e) => setOtp(e.target.value)} required />
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? 'Verifying...' : 'Verify'}
-          </button>
-        </form>
-      )}
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card shadow-lg p-4" style={{ maxWidth: '400px' }}>
+        <h2 className="text-center mb-4">{step === 'register' ? 'Register' : 'Verify OTP'}</h2>
+        {error && <p className="text-danger text-center">{error}</p>}
+        {step === 'register' ? (
+          <form onSubmit={handleRegister}>
+            <div className="mb-3">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+              {loading ? 'Registering...' : 'Register'}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleVerify}>
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+              {loading ? 'Verifying...' : 'Verify'}
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

@@ -9,14 +9,9 @@ interface CurrencySelectProps {
 
 export default function CurrencySelect({ value, onChange, label }: CurrencySelectProps) {
   return (
-    <div>
+    <div className="form-group">
       <label>{label}:</label>
-      <select
-        value={value}
-        onChange={onChange}
-        style={{ width: '150px' }}
-        required
-      >
+      <select className="form-select" value={value} onChange={onChange}>
         {COMMON_CURRENCIES.map((curr) => (
           <option key={curr.code} value={curr.code}>
             {curr.code} - {curr.name}
