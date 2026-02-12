@@ -1,7 +1,7 @@
 // src/pages/Dashboard.tsx
 import { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
-import { COMMON_CURRENCIES } from '../constants/currencies';
+import CurrencySelect from '../components/CurrencySelect';
 
 interface Wallet {
   id: string;
@@ -39,7 +39,9 @@ export default function Dashboard() {
   const [error, setError] = useState('');
 
   // Conversion form states
+  //eslint-disable-nextline @typescript-eslint/no-unused-vars
   const [fromCurrency, setFromCurrency] = useState('NGN');
+  //eslint-disable-nextline @typescript-eslint/no-unused-vars
   const [toCurrency, setToCurrency] = useState('USD');
   const [amount, setAmount] = useState<number>(0);
   const [convertResult, setConvertResult] = useState<number | null>(null);
@@ -129,15 +131,6 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* DATALIST - place it here, at the root level of return */}
-      <datalist id="currency-list">
-        {COMMON_CURRENCIES.map((curr) => (
-          <option key={curr.code} value={curr.code}>
-            {curr.code} – {curr.name}
-          </option>
-        ))}
-      </datalist>
-
       <div style={{ padding: '1rem' }}>
         <h2>Dashboard</h2>
 
@@ -169,17 +162,11 @@ export default function Dashboard() {
         <section style={{ margin: '2rem 0' }}>
           <h3>Fund Wallet</h3>
           <form onSubmit={handleFund} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            {/* Updated currency input */}
             <div>
-              <label>Currency:</label>
-              <input
-                list="currency-list"
+              <CurrencySelect
+                label="Currency"
                 value={fundCurrency}
-                onChange={(e) => setFundCurrency(e.target.value.toUpperCase().slice(0, 3))}
-                placeholder="NGN"
-                maxLength={3}
-                style={{ textTransform: 'uppercase', width: '100px' }}
-                required
+                onChange={(e) => setFundCurrency(e.target.value)}
               />
             </div>
 
@@ -206,29 +193,20 @@ export default function Dashboard() {
           <form onSubmit={handleConvert} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             {/* Updated From input */}
             <div>
-              <label>From:</label>
-              <input
-                list="currency-list"
+              <CurrencySelect
+                label="From"
                 value={fromCurrency}
-                onChange={(e) => setFromCurrency(e.target.value.toUpperCase().slice(0, 3))}
-                placeholder="NGN"
-                maxLength={3}
-                style={{ textTransform: 'uppercase', width: '100px' }}
-                required
+                onChange={(e) => setFromCurrency(e.target.value)}
               />
             </div>
 
             {/* Updated To input */}
             <div>
               <label>To:</label>
-              <input
-                list="currency-list"
+              <CurrencySelect
+                label="To"
                 value={toCurrency}
-                onChange={(e) => setToCurrency(e.target.value.toUpperCase().slice(0, 3))}
-                placeholder="USD"
-                maxLength={3}
-                style={{ textTransform: 'uppercase', width: '100px' }}
-                required
+                onChange={(e) => setToCurrency(e.target.value)}
               />
             </div>
 

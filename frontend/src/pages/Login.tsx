@@ -1,6 +1,5 @@
 // src/pages/Login.tsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,7 +9,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +19,7 @@ export default function Login() {
       const response = await api.post('/auth/login', { email, password });
       const { token: newToken } = response.data;
       setToken(newToken);
-      navigate('/dashboard');
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {

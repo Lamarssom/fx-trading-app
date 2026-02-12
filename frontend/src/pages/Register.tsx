@@ -1,6 +1,5 @@
 // src/pages/Register.tsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -12,7 +11,6 @@ export default function Register() {
   const [step, setStep] = useState<'register' | 'verify'>('register');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,9 +37,9 @@ export default function Register() {
       const res = await api.post('/auth/verify', { email, otp });
       if (res.data.token) {
         setToken(res.data.token);
-        navigate('/dashboard', { replace: true });
+        window.location.href = '/dashboard';
       } else {
-        navigate('/login');
+        window.location.href = '/login';
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Verification failed');
