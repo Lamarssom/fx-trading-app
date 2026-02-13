@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [fundResult, setFundResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [prevRate, setPrevRate] = useState<number | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // Conversion form states
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -53,12 +55,17 @@ export default function Dashboard() {
       const rateRes = await api.get<RateResponse>('/fx/rates', {
         params: { from: fromCurrency.toUpperCase(), to: toCurrency.toUpperCase() },
       });
-      setCurrentRate(rateRes.data.rate);
+      const newRate = rateRes.data.rate;
+      
+      setPrevRate(currentRate)
+      setCurrentRate(newRate);
+      setLastUpdated(new Date());
+
     } catch (err: any) {
       alert(err.response?.data?.message || 'Failed to fetch rate');
       setCurrentRate(null);
     }
-  }, [fromCurrency, toCurrency]);
+  }, [fromCurrency, toCurrency, currentRate]);
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -81,6 +88,18 @@ export default function Dashboard() {
 
     fetchInitialData();
   }, [fetchRate]);
+
+  useEffect(() => {
+    if (!fromCurrency || !toCurrency) return;
+
+    fetchRate();
+
+    const intervalID = setInterval(() => {
+      fetchRate();
+    }, 60000);
+
+    return () => clearInterval(intervalID);
+  }, [fetchRate, fromCurrency, toCurrency]);
 
 
   const handleFund = async (e: React.FormEvent) => {
@@ -153,15 +172,40 @@ export default function Dashboard() {
         </div>
 
         <div className="col-md-6 mb-4">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})</div>
+          <div className="card shadow mb-4">
+            <div className="card-header bg-primary text-white">
+              Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})
+            </div>
             <div className="card-body">
-              <p>
-                {currentRate !== null
-                  ? `1 ${fromCurrency.toUpperCase()} = ${currentRate.toFixed(6)} ${toCurrency.toUpperCase()}`
-                  : 'Click "Fetch Rate" to see current rate'}
-              </p>
-              <button className="btn btn-primary" onClick={fetchRate}>Fetch Rate</button>
+              {currentRate !== null ? (
+                <>
+                  <h4 className="mb-3">
+                    1 {fromCurrency.toUpperCase()} = {currentRate.toFixed(6)}{' '}
+                    {toCurrency.toUpperCase()}{' '}
+                    {prevRate !== null && (
+                      <span
+                        className={
+                          currentRate > prevRate
+                            ? 'text-success ms-2'
+                            : currentRate < prevRate
+                            ? 'text-danger ms-2'
+                            : 'text-muted ms-2'
+                        }
+                      >
+                        {currentRate > prevRate ? '↑' : currentRate < prevRate ? '↓' : '–'}
+                      </span>
+                    )}
+                  </h4>
+
+                  {lastUpdated && (
+                    <small className="text-muted">
+                      Last updated: {lastUpdated.toLocaleTimeString()}
+                    </small>
+                  )}
+                </>
+              ) : (
+                <p className="text-muted">Fetching rate...</p>
+              )}
             </div>
           </div>
         </div>
