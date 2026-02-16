@@ -147,181 +147,235 @@ export default function Dashboard() {
   if (error) return <p className="text-danger text-center mt-5">{error}</p>;
 
   return (
-    <div className="container mt-4">  {/* Main container */}
+    <div className="container mt-4">
       <h2 className="mb-4">Dashboard</h2>
-      <div className="row">  {/* Grid layout for sections */}
-        <div className="col-md-6 mb-4">
-          <div className="card shadow">  {/* Card for wallets */}
-            <div className="card-header bg-primary text-white">Your Wallets</div>
-            <div className="card-body">
-              {wallets.length === 0 ? (
-                <p>No wallets yet. Fund one to start trading.</p>
-              ) : (
-                <ul className="list-group list-group-flush">
-                  {wallets.map((w) => (
-                    <li key={w.id} className="list-group-item">
-                      <strong>{w.currency}:</strong> {w.amount.toFixed(2)}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
 
-        <div className="col-md-6 mb-4">
-          <div className="card shadow mb-4">
-            <div className="card-header bg-primary text-white">
-              Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})
-            </div>
-            <div className="card-body">
-              {currentRate !== null ? (
-                <>
-                  <h4 className="mb-3">
-                    1 {fromCurrency.toUpperCase()} = {currentRate.toFixed(6)}{' '}
-                    {toCurrency.toUpperCase()}{' '}
-                    {prevRate !== null && (
-                      <span
-                        className={
-                          currentRate > prevRate
-                            ? 'text-success ms-2'
-                            : currentRate < prevRate
-                            ? 'text-danger ms-2'
-                            : 'text-muted ms-2'
-                        }
-                      >
-                        {currentRate > prevRate ? '↑' : currentRate < prevRate ? '↓' : '–'}
-                      </span>
-                    )}
-                  </h4>
+      <ul className="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+        <li className="nav-item" role="presentation">
+          <button
+            className="nav-link active"
+            id="overview-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#overview"
+            type="button"
+            role="tab"
+            aria-controls="overview"
+            aria-selected="true"
+          >
+            Overview
+          </button>
+        </li>
+        <li className="nav-item" role="presentation">
+          <button
+            className="nav-link"
+            id="actions-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#actions"
+            type="button"
+            role="tab"
+            aria-controls="actions"
+            aria-selected="false"
+          >
+            Actions
+          </button>
+        </li>
+        <li className="nav-item" role="presentation">
+          <button
+            className="nav-link"
+            id="history-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#history"
+            type="button"
+            role="tab"
+            aria-controls="history"
+            aria-selected="false"
+          >
+            History
+          </button>
+        </li>
+      </ul>
 
-                  {lastUpdated && (
-                    <small className="text-muted">
-                      Last updated: {lastUpdated.toLocaleTimeString()}
-                    </small>
+      <div className="tab-content" id="dashboardTabContent">
+        {/* Tab 1: Overview – Wallets + Rate + Chart */}
+        <div
+          className="tab-pane fade show active"
+          id="overview"
+          role="tabpanel"
+          aria-labelledby="overview-tab"
+        >
+          <div className="row">
+            <div className="col-md-6 mb-4">
+              <div className="card shadow">
+                <div className="card-header bg-primary text-white">Your Wallets</div>
+                <div className="card-body">
+                  {wallets.length === 0 ? (
+                    <p>No wallets yet. Fund one to start trading.</p>
+                  ) : (
+                    <ul className="list-group list-group-flush">
+                      {wallets.map((w) => (
+                        <li key={w.id} className="list-group-item">
+                          <strong>{w.currency}:</strong> {w.amount.toFixed(2)}
+                        </li>
+                      ))}
+                    </ul>
                   )}
-                </>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-4">
+              <div className="card shadow mb-4">
+                <div className="card-header bg-primary text-white">
+                  Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})
+                </div>
+                <div className="card-body">
+                  {/* Your existing rate display code here */}
+                  {currentRate !== null ? (
+                    <>
+                      <h4 className="mb-3">
+                        1 {fromCurrency.toUpperCase()} = {currentRate.toFixed(6)}{' '}
+                        {toCurrency.toUpperCase()}{' '}
+                        {prevRate !== null && (
+                          <span
+                            className={
+                              currentRate > prevRate
+                                ? 'text-success ms-2'
+                                : currentRate < prevRate
+                                ? 'text-danger ms-2'
+                                : 'text-muted ms-2'
+                            }
+                          >
+                            {currentRate > prevRate ? '↑' : currentRate < prevRate ? '↓' : '–'}
+                          </span>
+                        )}
+                      </h4>
+                      {lastUpdated && (
+                        <small className="text-muted">
+                          Last updated: {lastUpdated.toLocaleTimeString()}
+                        </small>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-muted">Fetching rate...</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Chart – now prominent in Overview tab */}
+              <HistoricalRateChart fromCurrency={fromCurrency} toCurrency={toCurrency} />
+            </div>
+          </div>
+        </div>
+
+        {/* Tab 2: Actions – Fund + Convert */}
+        <div className="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+          <div className="row">
+            <div className="col-md-6 mb-4">
+            <div className="card shadow">
+                <div className="card-header bg-primary text-white">Fund Wallet</div>
+                <div className="card-body">
+                  {/* Your fund form code here – copy from original */}
+                  <form onSubmit={handleFund} className="d-flex flex-column gap-3">
+                    <div className="form-group">
+                      <CurrencySelect
+                        label="Currency"
+                        value={fundCurrency}
+                        onChange={(e) => setFundCurrency(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Amount:</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={fundAmount}
+                        onChange={(e) => setFundAmount(Number(e.target.value))}
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Fund</button>
+                  </form>
+                  {fundResult && <p className="mt-3 text-success">{fundResult}</p>}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-4">
+              <div className="card shadow">
+                <div className="card-header bg-primary text-white">Convert Currency</div>
+                <div className="card-body">
+                  {/* Your convert form code here */}
+                  <form onSubmit={handleConvert} className="d-flex flex-column gap-3">
+                    <div className="form-group">
+                      <CurrencySelect label="From" value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                      <CurrencySelect label="To" value={toCurrency} onChange={(e) => setToCurrency(e.target.value)} />
+                    </div>
+                    <div className="form-group">
+                      <label>Amount:</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={amount}
+                        onChange={(e) => setAmount(Number(e.target.value))}
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Convert</button>
+                  </form>
+                  {convertResult !== null && (
+                    <p className="mt-3 text-success">
+                      Success! Converted amount: {convertResult.toFixed(6)} {toCurrency.toUpperCase()}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tab 3: History – Transactions */}
+        <div className="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+          <div className="card shadow">
+            <div className="card-header bg-primary text-white">Transaction History</div>
+            <div className="card-body">
+              {transactions.length === 0 ? (
+                <p>No transactions yet.</p>
               ) : (
-                <p className="text-muted">Fetching rate...</p>
+                <div className="table-responsive">
+                  <table className="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>From → To</th>
+                        <th>Rate</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {transactions.map((tx) => (
+                        <tr key={tx.id}>
+                          <td>{tx.type}</td>
+                          <td>{tx.amount}</td>
+                          <td>{tx.fromCurrency} → {tx.toCurrency}</td>
+                          <td>{tx.rate ?? '-'}</td>
+                          <td>{tx.status}</td>
+                          <td>{new Date(tx.timestamp).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
-
-      <div className="row">
-        <div className="col-md-6 mb-4">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">Fund Wallet</div>
-            <div className="card-body">
-              <form onSubmit={handleFund} className="d-flex flex-column gap-3">  {/* Flex for spacing */}
-                <div className="form-group">
-                  <CurrencySelect
-                    label="Currency"
-                    value={fundCurrency}
-                    onChange={(e) => setFundCurrency(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Amount:</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={fundAmount}
-                    onChange={(e) => setFundAmount(Number(e.target.value))}
-                    min="0"
-                    step="0.01"
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">Fund</button>
-              </form>
-              {fundResult && (
-                <p className="mt-3 text-success">{fundResult}</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="col-md-6 mb-4">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">Convert Currency</div>
-            <div className="card-body">
-              <form onSubmit={handleConvert} className="d-flex flex-column gap-3">
-                <div className="form-group">
-                  <CurrencySelect
-                    label="From"
-                    value={fromCurrency}
-                    onChange={(e) => setFromCurrency(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <CurrencySelect
-                    label="To"
-                    value={toCurrency}
-                    onChange={(e) => setToCurrency(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Amount:</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                    min="0"
-                    step="0.01"
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary">Convert</button>
-              </form>
-              {convertResult !== null && (
-                <p className="mt-3 text-success">
-                  Success! Converted amount: {convertResult.toFixed(6)} {toCurrency.toUpperCase()}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="card shadow mt-4">
-        <div className="card-header bg-primary text-white">Transaction History</div>
-        <div className="card-body">
-          {transactions.length === 0 ? (
-            <p>No transactions yet.</p>
-          ) : (
-            <div className="table-responsive">  {/* Responsive table */}
-              <table className="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>From → To</th>
-                    <th>Rate</th>
-                    <th>Status</th>
-                    <th>Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((tx) => (
-                    <tr key={tx.id}>
-                      <td>{tx.type}</td>
-                      <td>{tx.amount}</td>
-                      <td>
-                        {tx.fromCurrency} → {tx.toCurrency}
-                      </td>
-                      <td>{tx.rate ?? '-'}</td>
-                      <td>{tx.status}</td>
-                      <td>{new Date(tx.timestamp).toLocaleString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </div>
-      <HistoricalRateChart fromCurrency={fromCurrency} toCurrency={toCurrency} />
     </div>
   );
 }
