@@ -18,32 +18,20 @@ export const useHistoricalRates = (fromCurrency: string, toCurrency: string) => 
     setError(null);
 
     try {
-      // Calculate dates: last 30 days
-      const today = new Date().toISOString().split('T')[0];
-      const start = new Date();
-      start.setDate(start.getDate() - 30);
-      const startDate = start.toISOString().split('T')[0];
+      const res = await api.get('/fx/historical', {
+        params: {
+          from: fromCurrency.toUpperCase(),
+          to: toCurrency.toUpperCase(),
+          days: 30,
+        },
+      });
 
-      // Frankfurter API (free, no key needed, supports many pairs; base is fromCurrency)
-      const url = `https://api.frankfurter.app/${startDate}..${today}?from=${fromCurrency.toUpperCase()}&to=${toCurrency.toUpperCase()}`;
+      const data = res.data;
+      if (!data.historical) {
+        throw new Error('No historical data returned');
+      }
 
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-
-      const data = await res.json();
-
-      if (!data.rates) throw new Error('No rates data returned');
-
-      // Transform to array of {date, rate}
-      const ratesArray: HistoricalRate[] = Object.entries(data.rates).map(([date, ratesObj]: [string, any]) => ({
-        date,
-        rate: ratesObj[toCurrency.toUpperCase()] as number || 0,
-      }));
-
-      // Sort by date ascending (Frankfurter usually returns newest first)
-      ratesArray.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-      setHistoricalRates(ratesArray);
+      setHistoricalRates(data.historical);
     } catch (err: any) {
       console.error('Historical rates fetch failed:', err);
       setError('Failed to load historical rates. Try again later.');

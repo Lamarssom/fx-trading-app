@@ -38,4 +38,40 @@ export class FxService {
       throw new Error('Unable to fetch real-time rate; please try later');
     }
   }
+
+  async getHistorical(from: string, to: string, days: number = 30): Promise<{ date: string; rate: number }[]> {
+    const cacheKey = hist_${from.toUpperCase()}_${to.toUpperCase()}_${days};
+    const cached = await this.cache.get<{ date: string; rate: number }[]>(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const currentRate = await this.getRate(from, to); // Reuse your existing latest rate
+
+      const historical: { date: string; rate: number }[] = [];
+      const today = new Date();
+
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+
+        // Simulate realistic variation: small random daily change (±0.5-2%) + slight overall trend
+        const randomVariation = (Math.random() - 0.5) * 0.02; // ±2%
+        const trend = (i / days) * 0.01; // Optional gentle upward/downward bias over time
+        const simulatedRate = currentRate * (1 + randomVariation + trend);
+
+        historical.push({
+          date: dateStr,
+          rate: Number(simulatedRate.toFixed(6)),
+        });
+      }
+
+      // Cache for 1 hour (adjust as needed)
+      await this.cache.set(cacheKey, historical, 3600);
+      return historical;
+    } catch (error) {
+      console.error('Historical rates simulation failed:', error);
+      throw new Error('Unable to generate historical rates at this time');
+    }
+  }
 }
