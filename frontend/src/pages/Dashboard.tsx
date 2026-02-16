@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
 import CurrencySelect from '../components/CurrencySelect';
+import HistoricalRateChart from '../components/HistoricalRateChart';
 
 interface Wallet {
   id: string;
@@ -96,7 +97,7 @@ export default function Dashboard() {
 
     const intervalID = setInterval(() => {
       fetchRate();
-    }, 60000);
+    }, 100000);
 
     return () => clearInterval(intervalID);
   }, [fetchRate, fromCurrency, toCurrency]);
@@ -323,6 +324,7 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+      <HistoricalRateChart fromCurrency={fromCurrency} toCurrency={toCurrency} />
     </div>
   );
 }
