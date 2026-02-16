@@ -40,7 +40,7 @@ export class FxService {
   }
 
   async getHistorical(from: string, to: string, days: number = 30): Promise<{ date: string; rate: number }[]> {
-    const cacheKey = hist_${from.toUpperCase()}_${to.toUpperCase()}_${days};
+    const cacheKey = `hist_${from.toUpperCase()}_${to.toUpperCase()}_${days}`;
     const cached = await this.cache.get<{ date: string; rate: number }[]>(cacheKey);
     if (cached) return cached;
 

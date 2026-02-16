@@ -19,7 +19,7 @@ export class FxController {
     @Query('days') days: string = '30',
   ) {
     const numDays = parseInt(days || '30', 10);
-    const historical = await this.fxService.getHistorical(from, to, numDays)
+    const historical = await this.fxService.getHistorical(from, to, numDays);
     return { historical };
   }
 }
