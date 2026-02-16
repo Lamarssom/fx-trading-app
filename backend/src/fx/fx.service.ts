@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import type { Cache } from 'cache-manager';  // Use import type
+import type { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { firstValueFrom } from 'rxjs';
 
@@ -22,7 +22,9 @@ export class FxService {
 
     try {
       const response = await firstValueFrom(
-        this.http.get(`${process.env.FX_API_BASE_URL}/${process.env.FX_API_KEY}/latest/${from}`),
+        this.http.get<FxResponse & { result: string; 'error-type'?: string }>(
+          `${process.env.FX_API_BASE_URL}/${process.env.FX_API_KEY}/latest/${from}`,
+        ),
       );
       const data = response.data;
       if (data.result !== 'success') {
@@ -32,16 +34,23 @@ export class FxService {
       if (!rate) throw new Error(`Currency ${to} not supported`);
       await this.cache.set(key, rate, 60);
       return rate;
-    } catch (error) {
-      console.error('FX API failure:', error.message, error.response?.data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('FX API failure:', error.message);
+      }
       if (from === 'NGN' && to === 'USD') return 0.00062;
       throw new Error('Unable to fetch real-time rate; please try later');
     }
   }
 
-  async getHistorical(from: string, to: string, days: number = 30): Promise<{ date: string; rate: number }[]> {
+  async getHistorical(
+    from: string,
+    to: string,
+    days: number = 30,
+  ): Promise<{ date: string; rate: number }[]> {
     const cacheKey = `hist_${from.toUpperCase()}_${to.toUpperCase()}_${days}`;
-    const cached = await this.cache.get<{ date: string; rate: number }[]>(cacheKey);
+    const cached =
+      await this.cache.get<{ date: string; rate: number }[]>(cacheKey);
     if (cached) return cached;
 
     try {

@@ -71,15 +71,12 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        setLoading(true);
-
+        setLoading(true)
         const walletRes = await api.get('/wallet');
         setWallets(walletRes.data || []);
-
         const txRes = await api.get('/transactions');
         setTransactions(txRes.data || []);
 
-        await fetchRate();
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to load data');
       } finally {
@@ -88,7 +85,7 @@ export default function Dashboard() {
     };
 
     fetchInitialData();
-  }, [fetchRate]);
+  }, []);
 
   useEffect(() => {
     if (!fromCurrency || !toCurrency) return;
