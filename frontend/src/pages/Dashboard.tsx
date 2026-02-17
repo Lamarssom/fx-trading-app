@@ -162,7 +162,7 @@ export default function Dashboard() {
             aria-controls="overview"
             aria-selected="true"
           >
-            <i className="bi bi-grid-1x2 me-2"></i>Overview
+            <i className="bi bi-speedometer2 me-2"></i>Overview
           </button>
         </li>
         <li className="nav-item" role="presentation">
@@ -176,7 +176,7 @@ export default function Dashboard() {
             aria-controls="actions"
             aria-selected="false"
           >
-            <i className="bi bi-currency-exchange me-2"></i>Actions
+            <i className="bi bi-currency-dollar me-2"></i>Actions
           </button>
         </li>
         <li className="nav-item" role="presentation">
@@ -190,7 +190,7 @@ export default function Dashboard() {
             aria-controls="history"
             aria-selected="false"
           >
-            <i className="bi bi-clock-history me-2"></i>History
+            <i className="bi bi-journal-text me-2"></i>History
           </button>
         </li>
       </ul>
@@ -280,7 +280,7 @@ export default function Dashboard() {
                       <CurrencySelect
                         label="Currency"
                         value={fundCurrency}
-                        onChange={(e) => setFundCurrency(e.target.value)}
+                        onChange={(newValue) => setFundCurrency(newValue)}
                       />
                     </div>
                     <div className="form-group">
@@ -308,10 +308,10 @@ export default function Dashboard() {
                   {/* Your convert form code here */}
                   <form onSubmit={handleConvert} className="d-flex flex-column gap-3">
                     <div className="form-group">
-                      <CurrencySelect label="From" value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)} />
+                      <CurrencySelect label="From" value={fromCurrency} onChange={(newValue) => setFromCurrency(newValue)} />
                     </div>
                     <div className="form-group">
-                      <CurrencySelect label="To" value={toCurrency} onChange={(e) => setToCurrency(e.target.value)} />
+                      <CurrencySelect label="To" value={toCurrency} onChange={(newValue) => setToCurrency(newValue)} />
                     </div>
                     <div className="form-group">
                       <label>Amount:</label>
