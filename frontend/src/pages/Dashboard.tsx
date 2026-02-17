@@ -102,14 +102,6 @@ export default function Dashboard() {
   }, [fetchRate, fromCurrency, toCurrency]);
 
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleFund = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (fundAmount <= 0) return alert('Enter a valid amount');
-
-    setShowPaymentModal(true);
-  };
-
   const handleConvert = async (e: React.FormEvent) => {
     e.preventDefault();
     if (amount <= 0) return alert('Enter a valid amount');
