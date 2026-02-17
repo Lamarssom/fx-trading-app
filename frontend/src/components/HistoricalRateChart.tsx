@@ -65,11 +65,11 @@ export default function HistoricalRateChart({ fromCurrency, toCurrency }: Props)
   };
 
   return (
-    <div className="card shadow mt-4">
+    <div className="card shadow mt-5">
       <div className="card-header bg-primary text-white">
         Historical Rates ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()}) - Last 30 Days
       </div>
-      <div className="card-body" style={{ height: '400px' }}>
+      <div className="card-body" style={{ height: '320px' }}>
         <Line data={chartData} options={options} />
       </div>
     </div>

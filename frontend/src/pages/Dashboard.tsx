@@ -162,7 +162,7 @@ export default function Dashboard() {
             aria-controls="overview"
             aria-selected="true"
           >
-            Overview
+            <i className="bi bi-grid-1x2 me-2"></i>Overview
           </button>
         </li>
         <li className="nav-item" role="presentation">
@@ -176,7 +176,7 @@ export default function Dashboard() {
             aria-controls="actions"
             aria-selected="false"
           >
-            Actions
+            <i className="bi bi-currency-exchange me-2"></i>Actions
           </button>
         </li>
         <li className="nav-item" role="presentation">
@@ -190,7 +190,7 @@ export default function Dashboard() {
             aria-controls="history"
             aria-selected="false"
           >
-            History
+            <i className="bi bi-clock-history me-2"></i>History
           </button>
         </li>
       </ul>
