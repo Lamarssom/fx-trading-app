@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import api from '../services/api';
 import CurrencySelect from '../components/CurrencySelect';
 import HistoricalRateChart from '../components/HistoricalRateChart';
+import MockPaystackModal from '../components/MockPaystackModal';
 
 interface Wallet {
   id: string;
@@ -34,6 +35,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentRate, setCurrentRate] = useState<number | null>(null);
   const [fundCurrency, setFundCurrency] = useState('NGN');
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [fundAmount, setFundAmount] = useState<number>(0);
   const [fundResult, setFundResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -100,25 +102,12 @@ export default function Dashboard() {
   }, [fetchRate, fromCurrency, toCurrency]);
 
 
-  const handleFund = async (e: React.FormEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleFund = (e: React.FormEvent) => {
     e.preventDefault();
     if (fundAmount <= 0) return alert('Enter a valid amount');
 
-    try {
-      await api.post('/wallet/fund', {
-        currency: fundCurrency.toUpperCase(),
-        amount: fundAmount,
-      });
-      setFundResult(`Success! Funded ${fundAmount} ${fundCurrency.toUpperCase()}`);
-
-      // Refresh data
-      const walletRes = await api.get('/wallet');
-      setWallets(walletRes.data || []);
-      const txRes = await api.get('/transactions');
-      setTransactions(txRes.data || []);
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Funding failed');
-    }
+    setShowPaymentModal(true);
   };
 
   const handleConvert = async (e: React.FormEvent) => {
@@ -274,8 +263,12 @@ export default function Dashboard() {
             <div className="card shadow">
                 <div className="card-header bg-primary text-white">Fund Wallet</div>
                 <div className="card-body">
-                  {/* Your fund form code here – copy from original */}
-                  <form onSubmit={handleFund} className="d-flex flex-column gap-3">
+                  {/* fund form */}
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    if (fundAmount <= 0) return alert('Enter a valid amount');
+                    setShowPaymentModal(true);  // Open modal instead of direct API
+                  }}>
                     <div className="form-group">
                       <CurrencySelect
                         label="Currency"
@@ -294,12 +287,38 @@ export default function Dashboard() {
                         step="0.01"
                       />
                     </div>
-                    <button type="submit" className="btn btn-primary">Fund</button>
+                    <button type="submit" className="btn btn-primary w-100 mt-3">
+                      Proceed to Pay with Paystack
+                    </button>
                   </form>
                   {fundResult && <p className="mt-3 text-success">{fundResult}</p>}
                 </div>
               </div>
             </div>
+
+            <MockPaystackModal
+              show={showPaymentModal}
+              onHide={() => setShowPaymentModal(false)}
+              amount={fundAmount}
+              currency={fundCurrency}
+              onSuccess={async () => {
+                try {
+                  await api.post('/wallet/fund', {
+                    currency: fundCurrency.toUpperCase(),
+                    amount: fundAmount,
+                  });
+                  setFundResult(`Success! Funded ${fundAmount} ${fundCurrency.toUpperCase()}`);
+
+                  // Refresh wallets & transactions
+                  const walletRes = await api.get('/wallet');
+                  setWallets(walletRes.data || []);
+                  const txRes = await api.get('/transactions');
+                  setTransactions(txRes.data || []);
+                } catch (err: any) {
+                  alert(err.response?.data?.message || 'Funding failed');
+                }
+              }}
+            />
 
             <div className="col-md-6 mb-4">
               <div className="card shadow">
