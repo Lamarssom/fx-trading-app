@@ -1,69 +1,81 @@
-#  FX Trading App (Full Stack)
+# FX Trading App (Full-Stack Fintech Demo)
 
-A full-stack foreign exchange trading application that allows users to create accounts, manage multi-currency wallets, and perform real-time currency conversions securely.
+A modern full-stack foreign exchange trading application that lets users register, verify via OTP email, manage multi-currency wallets, view live rates with charts, and simulate funding + conversions.
 
-Built with:
--  Backend: NestJS, TypeORM, PostgreSQL
--  Frontend: React (Create React App)
--  JWT Authentication
--  Real-time FX rate integration
+Live Demo: (coming soon — Vercel deployment in progress)
 
-Features
+## Features
 
-Authentication
-- User registration
-- OTP verification (console demo)
-- JWT-based authentication
-- Protected routes
+### Authentication & Security
+- Email + password registration
+- Real OTP verification via Resend (production-ready email delivery)
+- JWT authentication & protected routes
+- OTP expiry + secure in-memory store (Redis-ready for future)
 
-Wallet System
-- Multi-currency wallet per user
-- Balance tracking per currency
-- Transaction history logging
+### Wallet & Transactions
+- Multi-currency wallets (NGN, USD, etc.)
+- Atomic balance updates during conversions
+- Full transaction history with type, rate, status, timestamp
 
-FX Trading
-- Real-time FX rate fetching
-- Currency conversion
-- Atomic database transactions
-- Rate caching for performance
+### FX Trading & Rates
+- Real-time exchange rates (via ExchangeRate-API)
+- Auto-refresh every 60 seconds with direction indicator (↑ green / ↓ red)
+- 30-day historical rate line chart (simulated data for free tier; backend proxy)
+- Currency conversion with atomic DB transaction
+
+### UI/UX Highlights
+- Responsive Bootstrap 5 dashboard with tabs (Overview, Actions, History)
+- Searchable currency dropdowns via react-select
+- Mock Paystack payment modal for funding simulation (card inputs, success/failure paths, branding)
+- Chart.js historical rate visualization
+- Icons (bootstrap-icons) & fintech styling
+
+### Tech Stack
 
 Frontend
-- User dashboard
-- Wallet display
-- Currency conversion UI
-- Authentication flows
+- React (Create React App)
+- React Router, Bootstrap 5, react-select, Chart.js + react-chartjs-2, bootstrap-icons
 
-Architecture
+Backend
+- NestJS
+- TypeORM + PostgreSQL
+- JWT (passport-jwt)
+- Cache Manager (in-memory)
+- Resend (email OTP)
+- ExchangeRate-API (real-time rates)
 
-- Frontend (React) => Backend API (NestJS) => PostgreSQL Database
+Other
+- Axios for API calls
+- Environment variables (.env)
 
-Frontend Setup
-- cd frontend
-- npm install 
-- npm start
+## Setup Instructions
 
-Backend Setup
-- cd backend
-- npm install
-- npm run start:dev
+### Prerequisites
+- Node.js ≥ 18
+- PostgreSQL (local or hosted)
+- Resend account (free tier) + API key
+- ExchangeRate-API key (free tier)
 
-Add .env with :
-- DB credentials
-- JWT secret
-- FX API key
+### Backend
+```bash
+cd backend
+npm install
+# Create .env with:
+# DATABASE_URL=postgresql://user:pass@localhost:5432/fx_trading
+# JWT_SECRET=your-secret
+# RESEND_API_KEY=re_xxxxxxxx
+# EMAIL_FROM="FX Trading <onboarding@resend.dev>"
+# FX_API_BASE_URL=https://v6.exchangerate-api.com/v6
+# FX_API_KEY=your-api-key
 
-Tech Stack
-Frontend - React
-Backend - NestJS
-ORM - TypeORM
-Database - PostgreSQL
-Auth - JWT
-Email - Nodemailer
-Api Docs - Swagger
+npm run start:dev
 
-What This Project Demonstrates
-- Rest API design 
-- Secure authentication flows
-- Financial transaction integrity
-- State management between frontend and backend
-- Full-stack architecture
+Runs on https://loclahost:3000
+
+Frontend
+
+cd frontend
+npm install
+npm start
+
+Runs on https:localhost:3001
