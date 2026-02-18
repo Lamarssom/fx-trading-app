@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 
 interface JwtPayload {
-  sub: string; // Changed to string since User.id is uuid string
+  sub: string;
   email: string;
 }
 
@@ -12,16 +12,18 @@ interface JwtPayload {
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
     const secret = configService.get<string>('JWT_SECRET');
-    console.log(process.env.JWT_SECRET);
+
+    if (!secret) {
+      throw new Error('JWT_SECRET is not defined in environment variables');
+    }
 
     const jwtOptions: StrategyOptions = {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: secret,
+      passReqToCallback: false,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super(jwtOptions);
   }
 
