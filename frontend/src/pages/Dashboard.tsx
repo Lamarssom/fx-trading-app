@@ -129,7 +129,9 @@ export default function Dashboard() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Dashboard</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold text-primary m-0">Dashboard</h2>
+      </div>
 
       <ul className="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
         <li className="nav-item" role="presentation">
@@ -195,7 +197,7 @@ export default function Dashboard() {
                     <ul className="list-group list-group-flush">
                       {wallets.map((w) => (
                         <li key={w.id} className="list-group-item">
-                          <strong>{w.currency}:</strong> {w.amount.toFixed(2)}
+                          <strong>{w.currency}:</strong> <span className="amount-xl">{w.amount.toFixed(2)}</span>
                         </li>
                       ))}
                     </ul>
@@ -217,15 +219,7 @@ export default function Dashboard() {
                         1 {fromCurrency.toUpperCase()} = {currentRate.toFixed(6)}{' '}
                         {toCurrency.toUpperCase()}{' '}
                         {prevRate !== null && (
-                          <span
-                            className={
-                              currentRate > prevRate
-                                ? 'text-success ms-2'
-                                : currentRate < prevRate
-                                ? 'text-danger ms-2'
-                                : 'text-muted ms-2'
-                            }
-                          >
+                          <span className={currentRate > prevRate ? 'rate-up ms-2 fs-4' : currentRate < prevRate ? 'rate-down ms-2 fs-4' : 'text-muted ms-2'}>
                             {currentRate > prevRate ? '↑' : currentRate < prevRate ? '↓' : '–'}
                           </span>
                         )}
@@ -372,7 +366,9 @@ export default function Dashboard() {
                       {transactions.map((tx) => (
                         <tr key={tx.id}>
                           <td>{tx.type}</td>
-                          <td>{tx.amount}</td>
+                          <td className={Number(tx.amount) > 0 ? 'profit-text' : 'loss-text'}>
+                            {tx.amount}
+                          </td>
                           <td>{tx.fromCurrency} → {tx.toCurrency}</td>
                           <td>{tx.rate ?? '-'}</td>
                           <td>{tx.status}</td>
