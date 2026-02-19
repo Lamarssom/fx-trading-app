@@ -60,16 +60,29 @@ export class AuthService {
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expires = Date.now() + 10 * 60 * 1000; // 10 minutes
-
     this.otps.set(email, { otp, expires });
 
-    if (process.env.NODE_ENV !== 'production') {
-      console.log(`OTP for ${email}: ${otp} (also sent via email)`);
+    const skipEmail = process.env.SKIP_EMAIL_SENDING === 'true';
+    if (skipEmail) {
+      console.log(`[DEMO MODE] Skipping email send. OTP for ${email}: ${otp}`);
+      return {
+        message: 'User registered! (Demo mode - OTP shown below)',
+        otp: otp,
+        expiresIn: '10 minutes',
+      };
+    } else {
+      try {
+        await this.sendOtpEmail(email, otp);
+      } catch (err) {
+        console.error('Email failed but registration continued for demo:', err);
+      }
     }
-    
-    await this.sendOtpEmail(email, otp);
 
-    return { message: 'OTP sent to your email' };
+    return {
+      message: skipEmail
+        ? 'User registered! Check server logs for OTP (demo mode)'
+        : 'OTP sent to your email',
+    };
   }
 
   async verify(email: string, otp: string) {

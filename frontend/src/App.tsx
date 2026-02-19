@@ -4,6 +4,8 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const token = localStorage.getItem('token');
@@ -12,7 +14,7 @@ function App() {
     <Router>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary"> 
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">FX Trading App</Link>  {/* Add a brand/logo */}
+          <Link className="navbar-brand" to="/">FX Trading App</Link>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -60,6 +62,7 @@ function App() {
           />
         </Routes>
       </div>
+      <ToastContainer position="top-right" />
     </Router>
   );
 }

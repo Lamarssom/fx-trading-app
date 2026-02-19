@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 export default function Register() {
   const { setToken } = useAuth();
@@ -18,9 +19,27 @@ export default function Register() {
     setError('');
 
     try {
-      await api.post('/auth/register', { email, password });
+      const res = await api.post('/auth/register', { email, password });
+
       setStep('verify');
-      alert('OTP sent! Check console or email (console for dev)');
+
+      if (res.data.otp) {
+        console.log('=== DEMO MODE OTP ===');
+        console.log(`Email: ${email}`);
+        console.log(`Your OTP: ${res.data.otp}`);
+        console.log('This is for demo purposes only — expires in 10 minutes');
+        console.log('=====================');
+
+        toast.info(
+          <div>
+            <strong>Demo OTP:</strong> {res.data.otp}<br />
+            Check console (F12) or copy from here. Expires in 10 min.
+          </div>,
+          { autoClose: false }
+        );
+      } else {
+        alert('OTP sent! Check your email.');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
     } finally {
@@ -48,6 +67,7 @@ export default function Register() {
     }
   };
 
+  
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card shadow-lg p-4" style={{ maxWidth: '400px' }}>
