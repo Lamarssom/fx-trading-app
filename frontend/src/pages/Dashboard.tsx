@@ -128,7 +128,7 @@ export default function Dashboard() {
   if (error) return <p className="text-danger text-center mt-5">{error}</p>;
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 min-vh-100" style={{ backgroundColor: 'var(--fintech-bg)' }}>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="fw-bold text-primary m-0">Dashboard</h2>
       </div>

@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--fintech-bg);
+  color: var(--fintech-text);
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh;
 }
 
 code {
@@ -22,12 +21,13 @@ code {
   --fintech-warning: #f59e0b;
   --fintech-text: #111827;
   --fintech-text-muted: #6b7280;
-  --fintech-bg: #f8fafc;
+
+  --fintech-bg: #eff6ff;
   --fintech-card-bg: #ffffff;
-  --fintech-card-border: #e5e7eb;
+  --fintech-card-border: #dbeafe;
   --fintech-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   --fintech-radius: 1rem;
-  --fintech-gradient-hero: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  --fintech-gradient-hero: linear-gradient(135deg, #f0f7ff 0%, #e0f2fe 100%);
 }
 
 [data-theme="dark"] {
