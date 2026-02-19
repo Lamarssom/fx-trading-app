@@ -5,9 +5,14 @@ import { Transaction } from '../entities/transaction.entity';
 
 @Injectable()
 export class TransactionService {
-  constructor(@InjectRepository(Transaction) private txRepo: Repository<Transaction>) {}
+  constructor(
+    @InjectRepository(Transaction) private txRepo: Repository<Transaction>,
+  ) {}
 
   async getHistory(userId: string): Promise<Transaction[]> {
-    return this.txRepo.find({ where: { user: { id: userId } }, order: { timestamp: 'DESC' } });
+    return this.txRepo.find({
+      where: { user: { id: userId } },
+      order: { timestamp: 'DESC' },
+    });
   }
 }

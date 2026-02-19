@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <div className="container text-center mt-5 min-vh-100 d-flex flex-column justify-content">
+    <div
+      className="min-vh-100 d-flex flex-column justify-content-center align-items-center p-4"
+      style={{ backgroundColor: 'var(--fintech-bg)' }}
+    >
       <div className="jumbotron text-center p-5 rounded shadow-lg">
         <h1 className="display-4 fw-bold mb-3">FX Trading App</h1>
         <p className="lead fs-4 mb-4">Secure, fast currency trading — NGN ↔ USD, EUR and more.</p>

@@ -144,3 +144,23 @@ body {
   background-color: #00a698 !important;
   border-color: #00a698 !important;
 }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--fintech-bg) !important;
+}
+
+body {
+  background-color: var(--fintech-bg) !important;
+  min-height: 100vh;
+}
+
+.container, .container-fluid {
+  background-color: transparent !important;
+}
+
+.card, .card-body, .tab-content, .tab-pane {
+  background-color: var(--fintech-card-bg) !important;
+}

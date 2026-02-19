@@ -69,7 +69,7 @@ export default function Register() {
 
   
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="min-vh-100 d-flex justify-content-center align-items-center p-3" style={{ background: 'var(--fintech-gradient-hero)' }}>
       <div className="card shadow-lg p-4" style={{ maxWidth: '400px' }}>
         <h2 className="text-center mb-4">{step === 'register' ? 'Register' : 'Verify OTP'}</h2>
         {error && <p className="text-danger text-center">{error}</p>}

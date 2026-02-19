@@ -32,7 +32,8 @@ export class FxService {
       }
       rate = data.conversion_rates[to];
       if (!rate) throw new Error(`Currency ${to} not supported`);
-      await this.cache.set(key, rate, 60);
+      await this.cache.set(key, rate, 3600);
+      console.log('Fetching fresh FX rate from API...');
       return rate;
     } catch (error: unknown) {
       if (error instanceof Error) {
