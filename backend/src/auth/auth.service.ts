@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
@@ -9,7 +9,7 @@ import { Resend } from 'resend';
 @Injectable()
 export class AuthService {
   private resend: Resend;
-  private otps = new Map<string, { otp: string; expires: number }>(); // Improved: add expiry
+  private otps = new Map<string, { otp: string; expires: number }>();
 
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
@@ -21,7 +21,8 @@ export class AuthService {
   private async sendOtpEmail(email: string, otp: string): Promise<void> {
     try {
       const { data, error } = await this.resend.emails.send({
-        from: process.env.EMAIL_FROM || 'FX Trading App <onboarding@resend.dev>',
+        from:
+          process.env.EMAIL_FROM || 'FX Trading App <onboarding@resend.dev>',
         to: [email],
         subject: 'Your FX Trading App Verification Code',
         html: `
@@ -43,7 +44,9 @@ export class AuthService {
         throw new Error('Failed to send OTP email');
       }
 
-      console.log(`OTP email sent successfully to ${email} - Message ID: ${data?.id}`);
+      console.log(
+        `OTP email sent successfully to ${email} - Message ID: ${data?.id}`,
+      );
     } catch (err) {
       console.error('Email sending failed:', err);
       throw new Error('Could not send verification email. Please try again.');
@@ -52,8 +55,13 @@ export class AuthService {
 
   async register(email: string, password: string) {
     const existing = await this.userRepo.findOne({ where: { email } });
-    if (existing) throw new Error('Email already exists');
-
+    if (existing) {
+      throw new BadRequestException({
+        message:
+          'This email is already registered. Please log in or use a different email.',
+        error: 'email_exists',
+      });
+    }
     const hashed = await bcrypt.hash(password, 10);
     const user = this.userRepo.create({ email, password: hashed });
     await this.userRepo.save(user);
@@ -107,7 +115,13 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.userRepo.findOne({ where: { email } });
-    if (user && user.isVerified && (await bcrypt.compare(pass, user.password))) {
+    const isDemo = process.env.SKIP_EMAIL_SENDING === 'true';
+
+    if (
+      user &&
+      (await bcrypt.compare(pass, user.password)) &&
+      (isDemo || user.isVerified)
+    ) {
       return user;
     }
     return null;
