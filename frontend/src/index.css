@@ -164,3 +164,35 @@ body {
 .card, .card-body, .tab-content, .tab-pane {
   background-color: var(--fintech-card-bg) !important;
 }
+
+.tab-pane, .tab-content {
+  background-color: transparent !important;
+}
+
+.card-body {
+  background-color: rgba(240, 247, 255, 0.92) !important;
+}
+
+.list-group-item {
+  background-color: transparent !important;
+  border-color: var(--fintech-card-border);
+}
+
+.table {
+  --bs-table-bg: transparent !important;
+  --bs-table-accent-bg: rgba(59, 130, 246, 0.04) !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: rgba(59, 130, 246, 0.04) !important;
+}
+
+.form-control, .form-group label {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1;
+}
+
+.card {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(8px);
+}
