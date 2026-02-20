@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles/nova-theme.scss';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-document.documentElement.setAttribute('data-bs-theme', 'dark');
 
 import {
   Chart as ChartJS,
@@ -32,6 +31,8 @@ ChartJS.register(
   Legend,
   Filler
 );
+
+document.documentElement.setAttribute('data-bs-theme', 'dark');
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
