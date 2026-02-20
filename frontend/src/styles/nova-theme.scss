@@ -1241,3 +1241,14 @@ h6 {
   opacity: 1;
   visibility: visible;
 }
+
+.bg-gradient {
+  background: linear-gradient(90deg, #0d6efd, #6610f2) !important;
+}
+
+.card {
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+}

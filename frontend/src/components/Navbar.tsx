@@ -47,46 +47,45 @@ export default function Navbar() {
 
         {/* Menu */}
         <div className="collapse navbar-collapse" id="mainNavbar">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-1">
-            <li className="nav-item">
-              <NavLink 
-                className={({ isActive }) => `nav-link scroll-link ${isActive ? 'active' : ''}`}
-                to="/"
-              >
-                Home
-              </NavLink>
-            </li>
-
-            {token && (
-              <li className="nav-item">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-3">
+                <li className="nav-item">
                 <NavLink 
-                  className={({ isActive }) => `nav-link scroll-link ${isActive ? 'active' : ''}`}
-                  to="/dashboard"
+                    className={({ isActive }) => `nav-link scroll-link ${isActive ? 'active' : ''}`}
+                    to="/"
                 >
-                  Dashboard
+                    Home
                 </NavLink>
-              </li>
-            )}
-          </ul>
+                </li>
 
-          {/* Right side button - exactly like Nova "Get Started" */}
-          <div className="ms-lg-4 mt-3 mt-lg-0">
-            {!token ? (
-              <Link 
-                to="/register" 
-                className="btn btn-primary py-2 px-4 rounded-pill fw-medium"
-              >
-                Get Started Free
-              </Link>
-            ) : (
-              <button 
-                onClick={handleLogout}
-                className="btn btn-outline-light py-2 px-4 rounded-pill fw-medium"
-              >
-                Logout
-              </button>
-            )}
-          </div>
+                {token && (
+                <li className="nav-item">
+                    <NavLink 
+                    className={({ isActive }) => `nav-link scroll-link ${isActive ? 'active' : ''}`}
+                    to="/dashboard"
+                    >
+                    Dashboard
+                    </NavLink>
+                </li>
+                )}
+            </ul>
+
+            <div className="ms-lg-4 d-flex align-items-center mt-3 mt-lg-0">
+                {!token ? (
+                <Link 
+                    to="/register" 
+                    className="btn btn-primary py-2 px-4 rounded-pill fw-medium"
+                >
+                    Get Started Free
+                </Link>
+                ) : (
+                <button 
+                    onClick={handleLogout}
+                    className="btn btn-outline-light py-2 px-4 rounded-pill fw-medium"
+                >
+                    Logout
+                </button>
+                )}
+            </div>
         </div>
       </div>
     </header>

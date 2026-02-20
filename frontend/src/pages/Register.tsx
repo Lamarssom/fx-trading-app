@@ -3,6 +3,7 @@ import { useState } from 'react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
   const { setToken } = useAuth();
@@ -69,53 +70,131 @@ export default function Register() {
 
   
   return (
-    <div className="min-vh-100 d-flex justify-content-center align-items-center p-3" style={{ background: 'var(--fintech-gradient-hero)' }}>
-      <div className="card shadow-lg p-4" style={{ maxWidth: '400px' }}>
-        <h2 className="text-center mb-4">{step === 'register' ? 'Register' : 'Verify OTP'}</h2>
-        {error && <p className="text-danger text-center">{error}</p>}
-        {step === 'register' ? (
-          <form onSubmit={handleRegister}>
-            <div className="mb-3">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+    <div 
+      className="min-vh-100 d-flex align-items-center"
+      style={{ 
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
+      }}
+    >
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-5 col-md-7 col-sm-10">
+            <div 
+              className="card border-0 shadow-lg overflow-hidden"
+              style={{ borderRadius: '1.25rem' }}
+            >
+              <div className="card-body p-5 p-lg-6">
+                {/* Header with logo – consistent branding */}
+                <div className="text-center mb-5">
+                  <img 
+                    src="/nova-assets/images/logo-light.svg" 
+                    alt="FX Trading" 
+                    height="48" 
+                    className="mb-3"
+                  />
+                  <h2 className="fw-bold mb-1">
+                    {step === 'register' ? 'Create your account' : 'Verify your email'}
+                  </h2>
+                  <p className="text-muted">
+                    {step === 'register' 
+                      ? 'Join secure FX trading in minutes' 
+                      : 'Enter the OTP sent to your email'}
+                  </p>
+                </div>
+
+                {/* Error display – using Bootstrap alert for better visibility */}
+                {error && (
+                  <div className="alert alert-danger text-center mb-4" role="alert">
+                    {error}
+                  </div>
+                )}
+
+                {step === 'register' ? (
+                  <form onSubmit={handleRegister}>
+                    <div className="mb-4">
+                      <label className="form-label fw-medium">Email address</label>
+                      <input
+                        type="email"
+                        className="form-control form-control-lg"
+                        placeholder="name@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <label className="form-label fw-medium">Password</label>
+                      <input
+                        type="password"
+                        className="form-control form-control-lg"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary btn-lg w-100 rounded-pill fw-medium"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Creating account...
+                        </>
+                      ) : 'Register'}
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleVerify}>
+                    <div className="mb-4">
+                      <label className="form-label fw-medium">One-Time Password (OTP)</label>
+                      <input
+                        type="text"
+                        className="form-control form-control-lg text-center"
+                        placeholder="Enter 6-digit code"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        required
+                        maxLength={6}
+                      />
+                    </div>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary btn-lg w-100 rounded-pill fw-medium"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Verifying...
+                        </>
+                      ) : 'Verify & Continue'}
+                    </button>
+                  </form>
+                )}
+
+                {/* Footer link – only show on register step */}
+                {step === 'register' && (
+                  <div className="text-center mt-4">
+                    <p className="text-muted small mb-0">
+                      Already have an account?{' '}
+                      <Link to="/login" className="text-primary fw-medium text-decoration-none">
+                        Sign in
+                      </Link>
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="mb-3">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-              {loading ? 'Registering...' : 'Register'}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleVerify}>
-            <div className="mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-              {loading ? 'Verifying...' : 'Verify'}
-            </button>
-          </form>
-        )}
+
+            {/* subtle footer text */}
+            <p className="text-center text-muted mt-4 small">
+              © {new Date().getFullYear()} FX Trading – Secure & Simple
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

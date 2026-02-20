@@ -128,261 +128,294 @@ export default function Dashboard() {
   if (error) return <p className="text-danger text-center mt-5">{error}</p>;
 
   return (
-    <div className="min-vh-100 container py-4 px-3 px-md-4" style={{ backgroundColor: 'var(--fintech-bg)' }}>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold text-primary m-0">Dashboard</h2>
-      </div>
+    <div className="min-vh-100 bg-dark py-5">
+      <div className="container px-3 px-md-4">
 
-      <ul className="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
-        <li className="nav-item" role="presentation">
-          <button
-            className="nav-link active"
-            id="overview-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#overview"
-            type="button"
-            role="tab"
-            aria-controls="overview"
-            aria-selected="true"
-          >
-            <i className="bi bi-speedometer2 me-2"></i>Overview
-          </button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button
-            className="nav-link"
-            id="actions-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#actions"
-            type="button"
-            role="tab"
-            aria-controls="actions"
-            aria-selected="false"
-          >
-            <i className="bi bi-currency-dollar me-2"></i>Actions
-          </button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button
-            className="nav-link"
-            id="history-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#history"
-            type="button"
-            role="tab"
-            aria-controls="history"
-            aria-selected="false"
-          >
-            <i className="bi bi-journal-text me-2"></i>History
-          </button>
-        </li>
-      </ul>
+        {/* Dashboard Header - Nova style */}
+        <div className="d-flex justify-content-between align-items-center mb-5">
+          <div>
+            <h1 className="display-5 fw-bold text-white mb-1">Dashboard</h1>
+            <p className="text-white-50 mb-0">Welcome back • Real-time FX Trading</p>
+          </div>
+          <div className="text-end">
+            <small className="text-white-50 d-block">Last updated just now</small>
+          </div>
+        </div>
 
-      <div className="tab-content" id="dashboardTabContent">
-        {/* Tab 1: Overview – Wallets + Rate + Chart */}
-        <div
-          className="tab-pane fade show active"
-          id="overview"
-          role="tabpanel"
-          aria-labelledby="overview-tab"
-        >
-          <div className="row">
-            <div className="col-md-6 mb-4">
-              <div className="card shadow">
-                <div className="card-header bg-primary text-white">Your Wallets</div>
-                <div className="card-body">
-                  {wallets.length === 0 ? (
-                    <p>No wallets yet. Fund one to start trading.</p>
-                  ) : (
-                    <ul className="list-group list-group-flush">
-                      {wallets.map((w) => (
-                        <li key={w.id} className="list-group-item">
-                          <strong>{w.currency}:</strong> <span className="amount-xl">{w.amount.toFixed(2)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+        {/* Nova-style Tabs */}
+        <ul className="nav nav-pills nav-fill gap-2 mb-4" id="dashboardTabs" role="tablist">
+          <li className="nav-item" role="presentation">
+            <button
+              className="nav-link active rounded-pill fw-medium py-3"
+              id="overview-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#overview"
+              type="button"
+              role="tab"
+              aria-controls="overview"
+              aria-selected="true"
+            >
+              <i className="bi bi-speedometer2 me-2"></i> Overview
+            </button>
+          </li>
+          <li className="nav-item" role="presentation">
+            <button
+              className="nav-link rounded-pill fw-medium py-3"
+              id="actions-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#actions"
+              type="button"
+              role="tab"
+              aria-controls="actions"
+              aria-selected="false"
+            >
+              <i className="bi bi-currency-exchange me-2"></i> Actions
+            </button>
+          </li>
+          <li className="nav-item" role="presentation">
+            <button
+              className="nav-link rounded-pill fw-medium py-3"
+              id="history-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#history"
+              type="button"
+              role="tab"
+              aria-controls="history"
+              aria-selected="false"
+            >
+              <i className="bi bi-clock-history me-2"></i> History
+            </button>
+          </li>
+        </ul>
+
+        <div className="tab-content" id="dashboardTabContent">
+
+          {/* ==================== OVERVIEW TAB ==================== */}
+          <div className="tab-pane fade show active" id="overview" role="tabpanel">
+            <div className="row g-4">
+
+              {/* Wallets Card */}
+              <div className="col-lg-5">
+                <div className="card border-0 shadow-lg bg-dark h-100 rounded-4 overflow-hidden">
+                  <div className="card-header bg-gradient text-white py-4 border-0">
+                    <h5 className="mb-0 fw-semibold">Your Wallets</h5>
+                  </div>
+                  <div className="card-body p-4">
+                    {wallets.length === 0 ? (
+                      <div className="text-center py-5 text-white-50">
+                        <i className="bi bi-wallet2 fs-1 mb-3 d-block"></i>
+                        No wallets yet. Fund one below.
+                      </div>
+                    ) : (
+                      <div className="list-group list-group-flush">
+                        {wallets.map((w) => (
+                          <div key={w.id} className="list-group-item bg-transparent border-0 d-flex justify-content-between py-3">
+                            <div className="fw-medium">{w.currency}</div>
+                            <div className="fs-4 fw-bold text-white">{w.amount.toFixed(2)}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="col-md-6 mb-4">
-              <div className="card shadow mb-4">
-                <div className="card-header bg-primary text-white">
-                  Exchange Rate ({fromCurrency.toUpperCase()} → {toCurrency.toUpperCase()})
-                </div>
-                <div className="card-body">
-                  {/* Your existing rate display code here */}
-                  {currentRate !== null ? (
-                    <>
-                      <h4 className="mb-3">
-                        1 {fromCurrency.toUpperCase()} = {currentRate.toFixed(6)}{' '}
-                        {toCurrency.toUpperCase()}{' '}
+              {/* Live Rate + Chart */}
+              <div className="col-lg-7">
+                <div className="card border-0 shadow-lg bg-dark rounded-4 overflow-hidden mb-4">
+                  <div className="card-header bg-gradient text-white py-4 border-0 d-flex justify-content-between align-items-center">
+                    <h5 className="mb-0 fw-semibold">Live Exchange Rate</h5>
+                    {lastUpdated && (
+                      <small className="text-white-50">Updated {lastUpdated.toLocaleTimeString()}</small>
+                    )}
+                  </div>
+                  <div className="card-body p-5 text-center">
+                    {currentRate !== null ? (
+                      <div className="display-5 fw-bold text-white mb-2">
+                        1 {fromCurrency.toUpperCase()} = {currentRate.toFixed(6)} {toCurrency.toUpperCase()}
                         {prevRate !== null && (
-                          <span className={currentRate > prevRate ? 'rate-up ms-2 fs-4' : currentRate < prevRate ? 'rate-down ms-2 fs-4' : 'text-muted ms-2'}>
-                            {currentRate > prevRate ? '↑' : currentRate < prevRate ? '↓' : '–'}
+                          <span className={`ms-3 fs-3 ${currentRate > prevRate ? 'text-success' : currentRate < prevRate ? 'text-danger' : 'text-white-50'}`}>
+                            {currentRate > prevRate ? '↑' : '↓'}
                           </span>
                         )}
-                      </h4>
-                      {lastUpdated && (
-                        <small className="text-muted">
-                          Last updated: {lastUpdated.toLocaleTimeString()}
-                        </small>
-                      )}
-                    </>
-                  ) : (
-                    <p className="text-muted">Fetching rate...</p>
-                  )}
+                      </div>
+                    ) : (
+                      <p className="text-white-50">Fetching latest rate...</p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Chart – now prominent in Overview tab */}
-              <HistoricalRateChart fromCurrency={fromCurrency} toCurrency={toCurrency} />
-            </div>
-          </div>
-        </div>
-
-        {/* Tab 2: Actions – Fund + Convert */}
-        <div className="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
-          <div className="row">
-            <div className="col-md-6 mb-4">
-            <div className="card shadow">
-                <div className="card-header bg-primary text-white">Fund Wallet</div>
-                <div className="card-body">
-                  {/* fund form */}
-                  <form onSubmit={(e) => {
-                    e.preventDefault();
-                    if (fundAmount <= 0) return alert('Enter a valid amount');
-                    setShowPaymentModal(true);  // Open modal instead of direct API
-                  }}>
-                    <div className="form-group">
-                      <CurrencySelect
-                        label="Currency"
-                        value={fundCurrency}
-                        onChange={(newValue) => setFundCurrency(newValue)}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Amount:</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={fundAmount}
-                        onChange={(e) => setFundAmount(Number(e.target.value))}
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100 mt-3">
-                      Proceed to Pay with Paystack
-                    </button>
-                  </form>
-                  {fundResult && <p className="mt-3 text-success">{fundResult}</p>}
-                </div>
-              </div>
-            </div>
-
-            <MockPaystackModal
-              show={showPaymentModal}
-              onHide={() => setShowPaymentModal(false)}
-              amount={fundAmount}
-              currency={fundCurrency}
-              onSuccess={async () => {
-                try {
-                  await api.post('/wallet/fund', {
-                    currency: fundCurrency.toUpperCase(),
-                    amount: fundAmount,
-                  });
-                  setFundResult(`Success! Funded ${fundAmount} ${fundCurrency.toUpperCase()}`);
-
-                  // Refresh wallets & transactions
-                  const walletRes = await api.get('/wallet');
-                  setWallets(walletRes.data || []);
-                  const txRes = await api.get('/transactions');
-                  setTransactions(txRes.data || []);
-                } catch (err: any) {
-                  alert(err.response?.data?.message || 'Funding failed');
-                }
-              }}
-            />
-
-            <div className="col-md-6 mb-4">
-              <div className="card shadow">
-                <div className="card-header bg-primary text-white">Convert Currency</div>
-                <div className="card-body">
-                  {/* Your convert form code here */}
-                  <form onSubmit={handleConvert} className="d-flex flex-column gap-3">
-                    <div className="form-group">
-                      <CurrencySelect label="From" value={fromCurrency} onChange={(newValue) => setFromCurrency(newValue)} />
-                    </div>
-                    <div className="form-group">
-                      <CurrencySelect label="To" value={toCurrency} onChange={(newValue) => setToCurrency(newValue)} />
-                    </div>
-                    <div className="form-group">
-                      <label>Amount:</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={amount}
-                        onChange={(e) => setAmount(Number(e.target.value))}
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <button type="submit" className="btn btn-primary">Convert</button>
-                  </form>
-                  {convertResult !== null && (
-                    <p className="mt-3 text-success">
-                      Success! Converted amount: {convertResult.toFixed(6)} {toCurrency.toUpperCase()}
-                    </p>
-                  )}
+                {/* Chart */}
+                <div className="card border-0 shadow-lg bg-dark rounded-4 overflow-hidden">
+                  <div className="card-body p-4">
+                    <HistoricalRateChart fromCurrency={fromCurrency} toCurrency={toCurrency} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Tab 3: History – Transactions */}
-        <div className="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">Transaction History</div>
-            <div className="card-body">
-              {transactions.length === 0 ? (
-                <p>No transactions yet.</p>
-              ) : (
-                <div className="table-responsive">
-                  <table className="table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>From → To</th>
-                        <th>Rate</th>
-                        <th>Status</th>
-                        <th>Time</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {transactions.map((tx) => (
-                        <tr key={tx.id}>
-                          <td>{tx.type}</td>
-                          <td className={Number(tx.amount) > 0 ? 'profit-text' : 'loss-text'}>
-                            {tx.amount}
-                          </td>
-                          <td>{tx.fromCurrency} → {tx.toCurrency}</td>
-                          <td>{tx.rate ?? '-'}</td>
-                          <td>{tx.status}</td>
-                          <td>{new Date(tx.timestamp).toLocaleString()}</td>
+          {/* ==================== ACTIONS TAB ==================== */}
+          <div className="tab-pane fade" id="actions" role="tabpanel">
+            <div className="row g-4">
+              {/* Fund Wallet */}
+              <div className="col-lg-6">
+                <div className="card border-0 shadow-lg bg-dark rounded-4 overflow-hidden h-100">
+                  <div className="card-header bg-gradient text-white py-4 border-0">
+                    <h5 className="mb-0 fw-semibold">Fund Wallet</h5>
+                  </div>
+                  <div className="card-body p-5">
+                    <form onSubmit={(e) => {
+                      e.preventDefault();
+                      if (fundAmount <= 0) return alert('Enter a valid amount');
+                      setShowPaymentModal(true);
+                    }}>
+                      <div className="mb-4">
+                        <CurrencySelect
+                          label="Currency"
+                          value={fundCurrency}
+                          onChange={setFundCurrency}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label className="form-label fw-medium">Amount</label>
+                        <input
+                          type="number"
+                          className="form-control form-control-lg bg-transparent text-white border-secondary"
+                          value={fundAmount}
+                          onChange={(e) => setFundAmount(Number(e.target.value))}
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                        />
+                      </div>
+                      <button type="submit" className="btn btn-primary btn-lg w-100 rounded-pill fw-medium py-3">
+                        Proceed to Pay with Paystack
+                      </button>
+                    </form>
+                    {fundResult && <div className="alert alert-success mt-4 text-center">{fundResult}</div>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Convert Currency */}
+              <div className="col-lg-6">
+                <div className="card border-0 shadow-lg bg-dark rounded-4 overflow-hidden h-100">
+                  <div className="card-header bg-gradient text-white py-4 border-0">
+                    <h5 className="mb-0 fw-semibold">Convert Currency</h5>
+                  </div>
+                  <div className="card-body p-5">
+                    <form onSubmit={handleConvert} className="d-flex flex-column gap-4">
+                      <div>
+                        <CurrencySelect label="From" value={fromCurrency} onChange={setFromCurrency} />
+                      </div>
+                      <div>
+                        <CurrencySelect label="To" value={toCurrency} onChange={setToCurrency} />
+                      </div>
+                      <div>
+                        <label className="form-label fw-medium">Amount</label>
+                        <input
+                          type="number"
+                          className="form-control form-control-lg bg-transparent text-white border-secondary"
+                          value={amount}
+                          onChange={(e) => setAmount(Number(e.target.value))}
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                        />
+                      </div>
+                      <button type="submit" className="btn btn-primary btn-lg w-100 rounded-pill fw-medium py-3">
+                        Convert Now
+                      </button>
+                    </form>
+                    {convertResult !== null && (
+                      <div className="alert alert-success mt-4 text-center">
+                        Success! You received {convertResult.toFixed(6)} {toCurrency.toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="tab-pane fade" id="history" role="tabpanel">
+            <div className="card border-0 shadow-lg bg-dark rounded-4 overflow-hidden">
+              <div className="card-header bg-gradient text-white py-4 border-0">
+                <h5 className="mb-0 fw-semibold">Transaction History</h5>
+              </div>
+              <div className="card-body p-0">
+                {transactions.length === 0 ? (
+                  <div className="text-center py-5 text-white-50">
+                    <i className="bi bi-journal-text fs-1 mb-3 d-block"></i>
+                    No transactions yet
+                  </div>
+                ) : (
+                  <div className="table-responsive">
+                    <table className="table table-dark table-hover mb-0 align-middle">
+                      <thead className="table-dark">
+                        <tr>
+                          <th className="ps-4">Type</th>
+                          <th>Amount</th>
+                          <th>From → To</th>
+                          <th>Rate</th>
+                          <th>Status</th>
+                          <th className="text-end pe-4">Time</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                      </thead>
+                      <tbody>
+                        {transactions.map((tx) => (
+                          <tr key={tx.id}>
+                            <td className="ps-4 fw-medium">{tx.type}</td>
+                            <td className={Number(tx.amount) > 0 ? 'text-success fw-bold' : 'text-danger fw-bold'}>
+                              {tx.amount}
+                            </td>
+                            <td>{tx.fromCurrency} → {tx.toCurrency}</td>
+                            <td>{tx.rate ?? '—'}</td>
+                            <td>
+                              <span className={`badge ${tx.status === 'completed' ? 'bg-success' : 'bg-warning'}`}>
+                                {tx.status}
+                              </span>
+                            </td>
+                            <td className="text-end pe-4 text-white-50">
+                              {new Date(tx.timestamp).toLocaleString()}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
+
         </div>
       </div>
+
+      {/* Paystack Modal */}
+      <MockPaystackModal
+      show={showPaymentModal}
+        onHide={() => setShowPaymentModal(false)}
+        amount={fundAmount}
+        currency={fundCurrency}
+        onSuccess={async () => {
+          try {
+            await api.post('/wallet/fund', {
+              currency: fundCurrency.toUpperCase(),
+              amount: fundAmount,
+            });
+            setFundResult(`Success! Funded ${fundAmount} ${fundCurrency.toUpperCase()}`);
+
+            const walletRes = await api.get('/wallet');
+            setWallets(walletRes.data || []);
+            const txRes = await api.get('/transactions');
+            setTransactions(txRes.data || []);
+          } catch (err: any) {
+            alert(err.response?.data?.message || 'Funding failed');
+          }
+        }}
+      />
     </div>
   );
 }
