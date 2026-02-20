@@ -29,7 +29,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-vh-100 d-flex align-items-center" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>  {/* Nova-like dark gradient */}
+    <div className="min-vh-100 d-flex align-items-center" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }} data-bs-theme="dark">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-lg-5 col-md-7">
@@ -43,17 +43,17 @@ export default function Login() {
                     className="mb-3"
                   />
                   <h2 className="fw-bold mb-1">Welcome back</h2>
-                  <p className="text-muted">Sign in to your trading account</p>
+                  <p className="text-white-75 mb-5">Sign in to your trading account</p>
                 </div>
 
                 {error && <div className="alert alert-danger text-center">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                   <div className="mb-4">
-                    <label className="form-label fw-medium">Email address</label>
+                    <label className="form-label fw-medium text-white">Email address</label>
                     <input
                       type="email"
-                      className="form-control form-control-lg"
+                      className="form-control form-control-lg bg-dark text-white border-light"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -61,7 +61,7 @@ export default function Login() {
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="form-label fw-medium">Password</label>
+                    <label className="form-label fw-medium text-white">Password</label>
                     <input
                       type="password"
                       className="form-control form-control-lg"
@@ -86,7 +86,7 @@ export default function Login() {
                 </form>
 
                 <div className="text-center mt-4">
-                  <p className="text-muted small">
+                  <p className="text-white-75 small mt-4">
                     Don't have an account? <Link to="/register" className="text-primary fw-medium">Sign up</Link>
                   </p>
                 </div>

@@ -75,6 +75,7 @@ export default function Register() {
       style={{ 
         background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
       }}
+      data-bs-theme="dark"
     >
       <div className="container">
         <div className="row justify-content-center">
@@ -89,13 +90,14 @@ export default function Register() {
                   <img 
                     src="/nova-assets/images/logo-light.svg" 
                     alt="FX Trading" 
-                    height="48" 
-                    className="mb-3"
+                    height="60" 
+                    className="mb-4"
+                    style={{ filter: 'brightness(1.1)' }}
                   />
                   <h2 className="fw-bold mb-1">
                     {step === 'register' ? 'Create your account' : 'Verify your email'}
                   </h2>
-                  <p className="text-muted">
+                  <p className="text-white-75">
                     {step === 'register' 
                       ? 'Join secure FX trading in minutes' 
                       : 'Enter the OTP sent to your email'}
@@ -112,10 +114,10 @@ export default function Register() {
                 {step === 'register' ? (
                   <form onSubmit={handleRegister}>
                     <div className="mb-4">
-                      <label className="form-label fw-medium">Email address</label>
+                      <label className="form-label fw-medium text-white">Email address</label>
                       <input
                         type="email"
-                        className="form-control form-control-lg"
+                        className="form-control form-control-lg bg-dark text-white border-light"
                         placeholder="name@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -123,7 +125,7 @@ export default function Register() {
                       />
                     </div>
                     <div className="mb-5">
-                      <label className="form-label fw-medium">Password</label>
+                      <label className="form-label fw-medium text-white">Password</label>
                       <input
                         type="password"
                         className="form-control form-control-lg"
@@ -178,7 +180,7 @@ export default function Register() {
                 {/* Footer link – only show on register step */}
                 {step === 'register' && (
                   <div className="text-center mt-4">
-                    <p className="text-muted small mb-0">
+                    <p className="text-white-75 small mb-0">
                       Already have an account?{' '}
                       <Link to="/login" className="text-primary fw-medium text-decoration-none">
                         Sign in
@@ -190,7 +192,7 @@ export default function Register() {
             </div>
 
             {/* subtle footer text */}
-            <p className="text-center text-muted mt-4 small">
+            <p className="text-white-75 text-center mt-4 small">
               © {new Date().getFullYear()} FX Trading – Secure & Simple
             </p>
           </div>
