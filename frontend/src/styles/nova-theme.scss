@@ -1032,8 +1032,8 @@ h6 {
 
 .faq__v2 .custom-accordion {
   --bs-accordion-bg: var(--bs-body-bg);
-  --bs-accordion-btn-icon: url("");
-  --bs-accordion-btn-active-icon: url("");
+  --bs-accordion-btn-icon: none;
+  --bs-accordion-btn-active-icon: none;
 }
 
 .faq__v2 .custom-accordion .accordion-button {
