@@ -6,8 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import './styles/nova-theme.scss';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+document.documentElement.setAttribute('data-bs-theme', 'dark');
 
-// Add these two lines for Chart.js + fill support
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,7 +19,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler,           // ← This is the missing plugin
+  Filler,           
 } from 'chart.js';
 
 ChartJS.register(
@@ -28,7 +30,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler           // ← Register it here
+  Filler
 );
 
 const root = ReactDOM.createRoot(
